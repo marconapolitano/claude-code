@@ -1,2 +1,5 @@
 * text=auto eol=lf
 *.sh text eol=lf
+claude auth login
+are u working?
+
