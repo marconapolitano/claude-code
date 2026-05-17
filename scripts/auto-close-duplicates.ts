@@ -3,8 +3,11 @@
 declare global {
   var process: {
     env: Record<string, string | undefined>;
+    argv: string[];
   };
 }
+
+const DRY_RUN = process.argv.includes("--dry-run");
 
 interface GitHubIssue {
   number: number;
@@ -70,6 +73,11 @@ async function closeIssueAsDuplicate(
   duplicateOfNumber: number,
   token: string
 ): Promise<void> {
+  if (DRY_RUN) {
+    console.log(`[DRY RUN] Would close #${issueNumber} as duplicate of #${duplicateOfNumber}`);
+    return;
+  }
+
   await githubRequest(
     `/repos/${owner}/${repo}/issues/${issueNumber}`,
     token,
@@ -93,11 +101,11 @@ If this is incorrect, please re-open this issue or create a new one.
 🤖 Generated with [Claude Code](https://claude.ai/code)`
     }
   );
-
 }
 
 async function autoCloseDuplicates(): Promise<void> {
   console.log("[DEBUG] Starting auto-close duplicates script");
+  if (DRY_RUN) console.log("DRY RUN — no changes will be made\n");
 
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
@@ -253,12 +261,14 @@ async function autoCloseDuplicates(): Promise<void> {
     
     try {
       console.log(
-        `[INFO] Auto-closing issue #${issue.number} as duplicate of #${duplicateIssueNumber}: ${issueUrl}`
+        `[INFO] ${DRY_RUN ? '[DRY RUN] Would close' : 'Auto-closing'} issue #${issue.number} as duplicate of #${duplicateIssueNumber}: ${issueUrl}`
       );
       await closeIssueAsDuplicate(owner, repo, issue.number, duplicateIssueNumber, token);
-      console.log(
-        `[SUCCESS] Successfully closed issue #${issue.number} as duplicate of #${duplicateIssueNumber}`
-      );
+      if (!DRY_RUN) {
+        console.log(
+          `[SUCCESS] Successfully closed issue #${issue.number} as duplicate of #${duplicateIssueNumber}`
+        );
+      }
     } catch (error) {
       console.error(
         `[ERROR] Failed to close issue #${issue.number} as duplicate: ${error}`
@@ -267,7 +277,7 @@ async function autoCloseDuplicates(): Promise<void> {
   }
 
   console.log(
-    `[DEBUG] Script completed. Processed ${processedCount} issues, found ${candidateCount} candidates for auto-close`
+    `[DEBUG] Script completed. Processed ${processedCount} issues, found ${candidateCount} candidates for auto-close${DRY_RUN ? " (dry run — no changes made)" : ""}`
   );
 }
 
