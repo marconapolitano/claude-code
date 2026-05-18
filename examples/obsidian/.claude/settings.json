@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**/*.md)",
+      "Read(**/*.canvas)",
+      "Read(**/*.json)",
+      "Edit(**/*.md)",
+      "Write(**/*.md)",
+      "Bash(find . -name '*.md' *)",
+      "Bash(grep -r * --include='*.md' *)",
+      "Bash(grep -l * --include='*.md' *)",
+      "Bash(ls *)",
+      "Bash(wc -l *)",
+      "Bash(date *)"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(mv *)",
+      "Bash(cp *)",
+      "Write(**/*.canvas)",
+      "Write(**/Attachments/**)"
+    ]
+  }
+}
