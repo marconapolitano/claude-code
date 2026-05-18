@@ -1,0 +1,9 @@
+{
+  "name": "obsidian",
+  "version": "1.0.0",
+  "description": "Obsidian vault integration: slash commands for note creation and daily notes, wikilink-safe hooks, and syntax-aware skills",
+  "author": {
+    "name": "marconapolitano",
+    "email": ""
+  }
+}
