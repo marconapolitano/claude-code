@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ibiza da Roma - Weekend Estate 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00d4ff, #ff6bcb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+
+  .header p {
+    color: #888;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+
+  .legend-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .weekend-row {
+    display: grid;
+    grid-template-columns: 1fr 140px;
+    gap: 0;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .weekend-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .weekend-main {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+  }
+
+  .weekend-rank {
+    font-size: 1.6rem;
+    font-weight: 800;
+    min-width: 36px;
+    text-align: center;
+    opacity: 0.3;
+  }
+
+  .weekend-dates {
+    min-width: 180px;
+  }
+
+  .weekend-dates .date-range {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #fff;
+  }
+
+  .weekend-dates .date-detail {
+    font-size: 0.78rem;
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  .weekend-info {
+    flex: 1;
+  }
+
+  .weekend-info .label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .weekend-info .events {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    line-height: 1.4;
+  }
+
+  .weekend-badges {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .badge-ponte { background: rgba(0,212,255,0.2); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+  .badge-closing { background: rgba(255,107,203,0.2); color: #ff6bcb; border: 1px solid rgba(255,107,203,0.3); }
+  .badge-resistance { background: rgba(255,170,50,0.2); color: #ffaa32; border: 1px solid rgba(255,170,50,0.3); }
+  .badge-radio1 { background: rgba(120,120,255,0.2); color: #9999ff; border: 1px solid rgba(120,120,255,0.3); }
+  .badge-ferie { background: rgba(255,255,255,0.1); color: #ccc; border: 1px solid rgba(255,255,255,0.15); }
+
+  .price-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.3);
+    border-left: 1px solid rgba(255,255,255,0.05);
+    min-width: 140px;
+  }
+
+  .price-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+
+  .price-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .price-value span {
+    font-size: 0.8rem;
+    font-weight: 400;
+    opacity: 0.5;
+  }
+
+  .price-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .price-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .month-divider {
+    padding: 24px 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .month-divider h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .month-divider .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
+  }
+
+  .tooltip {
+    display: none;
+    position: fixed;
+    background: #1a1a2e;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 16px 20px;
+    max-width: 380px;
+    z-index: 100;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #ccc;
+    pointer-events: none;
+  }
+
+  .tooltip h3 {
+    color: #fff;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+
+  .tooltip .tip-events {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tooltip .tip-events div {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+  }
+
+  .tooltip .tip-events .day { color: #00d4ff; font-weight: 600; min-width: 30px; }
+  .tooltip .tip-events .club { opacity: 0.6; }
+
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .summary-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .summary-card .big {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .summary-card .desc {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 48px;
+    font-size: 0.75rem;
+    opacity: 0.35;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 700px) {
+    .weekend-row { grid-template-columns: 1fr; }
+    .weekend-main { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+    .weekend-rank { display: none; }
+    .weekend-dates { min-width: unset; }
+    .price-col { flex-direction: row; gap: 12px; border-left: none; border-top: 1px solid rgba(255,255,255,0.05); }
+    .header h1 { font-size: 1.6rem; }
+    .summary-cards { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>IBIZA DA ROMA</h1>
+  <p>Weekend strategici estate 2026 &middot; Gradazione colore = consiglio &middot; Prezzo voli A/R stimato</p>
+</div>
+
+<div class="container">
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="big" style="color:#00d4ff">18</div>
+      <div class="desc">Weekend analizzati</div>
+    </div>
+    <div class="summary-card">
+      <div class="big" style="color:#22c55e">1</div>
+      <div class="desc">Ponte disponibile</div>
+    </div>
+    <div class="summary-card">
+      <div class="big" style="color:#ff6bcb">~50&euro;</div>
+      <div class="desc">Volo A/R min (Sett)</div>
+    </div>
+    <div class="summary-card">
+      <div class="big" style="color:#ffaa32">~180&euro;</div>
+      <div class="desc">Volo A/R max (Lug)</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background:#16a34a"></div> Top consigliato</div>
+    <div class="legend-item"><div class="legend-color" style="background:#65a30d"></div> Molto buono</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ca8a04"></div> Buono</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ea580c"></div> Medio</div>
+    <div class="legend-item"><div class="legend-color" style="background:#dc2626"></div> Sconsigliato</div>
+    <div class="legend-item" style="margin-left:16px"><div class="legend-color" style="background:linear-gradient(90deg,#22c55e,#dc2626)"></div> Barra prezzo (verde=economico)</div>
+  </div>
+
+  <div id="calendar"></div>
+
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="footer-note">
+  Prezzi indicativi basati su trend storici Ryanair/Vueling/Wizz Air &middot; Prenotare 2-3 settimane prima per risparmiare ~36%<br>
+  Dati residenze: Ibiza Spotlight, Beatportal, club ufficiali &middot; Aggiornato maggio 2026
+</div>
+
+<script>
+const weekends = [
+  // GIUGNO
+  { month: "Giugno", start: "30/5", end: "2/6", days: "Sab 30 Mag - Mar 2 Giu", label: "PONTE 2 GIUGNO", ferie: 1, giorniTot: 4, score: 98, price: 100, priceLabel: "80-120",
+    badges: ["ponte"], note: "L'unico ponte dell'estate! 4 giorni con 1 sola ferie.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia" },
+      { day: "Sab", what: "Black Coffee @ Hi Ibiza, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, Carl Cox @ UNVRS" },
+      { day: "Lun", what: "David Guetta @ Ushuaia, Circoloco @ DC-10" },
+      { day: "Mar", what: "Paco Osuna @ Hi Ibiza" }
+    ]
+  },
+  { month: null, start: "5/6", end: "7/6", days: "Ven 5 - Dom 7 Giu", label: "Inizio stagione piena", ferie: 1, giorniTot: 3, score: 72, price: 110, priceLabel: "90-130",
+    badges: [], note: "Primo weekend pieno post-ponte. Tutte le residenze attive.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Marco Carola @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+  { month: null, start: "12/6", end: "14/6", days: "Ven 12 - Dom 14 Giu", label: "Season warming up", ferie: 1, giorniTot: 3, score: 68, price: 120, priceLabel: "100-140",
+    badges: [], note: "Stagione in crescita. Voli cari ma lineup solidi.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Marco Carola @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, Bedouin SAGA @ Eden" }
+    ]
+  },
+  { month: null, start: "19/6", end: "21/6", days: "Ven 19 - Dom 21 Giu", label: "David Guetta UNVRS debut", ferie: 1, giorniTot: 3, score: 65, price: 130, priceLabel: "110-150",
+    badges: [], note: "Guetta debutta al UNVRS il venerdi. Giugno rimane caro per i voli.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Guetta @ UNVRS, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, SAGA @ Eden" }
+    ]
+  },
+  { month: null, start: "26/6", end: "28/6", days: "Ven 26 - Dom 28 Giu", label: "Fine giugno", ferie: 1, giorniTot: 3, score: 60, price: 140, priceLabel: "120-160",
+    badges: [], note: "Ultimo weekend di giugno. Prezzi voli al massimo stagionale.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Guetta @ UNVRS, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, SAGA @ Eden" }
+    ]
+  },
+
+  // LUGLIO
+  { month: "Luglio", start: "3/7", end: "5/7", days: "Ven 3 - Dom 5 Lug", label: "Inizio luglio", ferie: 1, giorniTot: 3, score: 55, price: 150, priceLabel: "130-170",
+    badges: [], note: "Alta stagione. Prezzi alti, isola affollata. Lineup completo.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Guetta @ UNVRS, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, Carl Cox @ UNVRS" }
+    ]
+  },
+  { month: null, start: "10/7", end: "12/7", days: "Ven 10 - Dom 12 Lug", label: "Calvin Harris x2 attivo", ferie: 1, giorniTot: 3, score: 58, price: 155, priceLabel: "130-180",
+    badges: [], note: "Calvin Harris ora anche il martedi! Doppia residenza attiva.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+  { month: null, start: "17/7", end: "19/7", days: "Ven 17 - Dom 19 Lug", label: "Pre-RESISTANCE", ferie: 1, giorniTot: 3, score: 55, price: 160, priceLabel: "140-180",
+    badges: [], note: "Tutto attivo ma RESISTANCE parte la settimana dopo. Aspetta.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Guetta @ UNVRS, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, SAGA @ Eden" }
+    ]
+  },
+  { month: null, start: "24/7", end: "26/7", days: "Ven 24 - Dom 26 Lug", label: "RESISTANCE DEBUT", ferie: 1, giorniTot: 3, score: 78, price: 160, priceLabel: "140-180",
+    badges: ["resistance"], note: "Primo RESISTANCE con Beyer + Prydz/ARTBAT/Brejcha! Se ami la techno, e' IL weekend.",
+    events: [
+      { day: "Mer", what: "RESISTANCE @ Amnesia (Beyer + guest)" },
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+
+  // AGOSTO
+  { month: "Agosto", start: "31/7", end: "2/8", days: "Ven 31 Lug - Dom 2 Ago", label: "BBC RADIO 1 WEEKEND", ferie: 1, giorniTot: 3, score: 72, price: 165, priceLabel: "140-190",
+    badges: ["radio1"], note: "Weekend iconico di Radio 1 con lineup speciali in tutta l'isola.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow, Radio 1 specials" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, Carl Cox @ UNVRS" }
+    ]
+  },
+  { month: null, start: "7/8", end: "9/8", days: "Ven 7 - Dom 9 Ago", label: "Peak season", ferie: 1, giorniTot: 3, score: 48, price: 170, priceLabel: "150-190",
+    badges: [], note: "Picco assoluto. Prezzi massimi, isola strapiena. Tutto attivo ma caro.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Guetta @ UNVRS" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+  { month: null, start: "14/8", end: "16/8", days: "Ven 14 - Dom 16 Ago", label: "FERRAGOSTO", ferie: 0, giorniTot: 2, score: 35, price: 180, priceLabel: "160-200",
+    badges: ["ferie"], note: "Ferragosto (sab 15). 0 ferie ma voli CARISSIMI e isola al collasso. Sconsigliato.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow - FERRAGOSTO specials" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+  { month: null, start: "21/8", end: "23/8", days: "Ven 21 - Dom 23 Ago", label: "Fine agosto caldo", ferie: 1, giorniTot: 3, score: 52, price: 155, priceLabel: "130-180",
+    badges: [], note: "Ultimo weekend con Calvin Harris il martedi. Ancora molto caro.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+  { month: null, start: "28/8", end: "30/8", days: "Ven 28 - Dom 30 Ago", label: "Ultimo agosto", ferie: 1, giorniTot: 3, score: 62, price: 130, priceLabel: "100-160",
+    badges: [], note: "Fine agosto, prezzi iniziano a scendere. Calvin Harris solo venerdi. Buon compromesso.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, SAGA @ Eden" }
+    ]
+  },
+
+  // SETTEMBRE
+  { month: "Settembre", start: "4/9", end: "6/9", days: "Ven 4 - Dom 6 Set", label: "Settembre dorato", ferie: 1, giorniTot: 3, score: 82, price: 80, priceLabel: "60-100",
+    badges: [], note: "Voli crollano! Meteo perfetto, isola piu' vivibile. Tutte le residenze ancora attive.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, SAGA @ Eden" }
+    ]
+  },
+  { month: null, start: "11/9", end: "13/9", days: "Ven 11 - Dom 13 Set", label: "Best value weekend", ferie: 1, giorniTot: 3, score: 85, price: 65, priceLabel: "50-80",
+    badges: [], note: "Prezzo/qualita' imbattibile. Tutto ancora attivo, voli economici, meteo top.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha, SAGA @ Eden" }
+    ]
+  },
+  { month: null, start: "18/9", end: "20/9", days: "Ven 18 - Dom 20 Set", label: "Pre-closing vibes", ferie: 1, giorniTot: 3, score: 88, price: 55, priceLabel: "40-70",
+    badges: ["closing"], note: "Closing parties iniziate! Atmosfera unica, set prolungati, ospiti a sorpresa.",
+    events: [
+      { day: "Ven", what: "Calvin Harris @ Ushuaia, Music On @ Pacha" },
+      { day: "Sab", what: "Black Coffee @ Hi, elrow @ UNVRS" },
+      { day: "Dom", what: "Solomun +1 @ Pacha" }
+    ]
+  },
+  { month: null, start: "25/9", end: "27/9", days: "Ven 25 - Dom 27 Set", label: "CLOSING SEASON", ferie: 1, giorniTot: 3, score: 92, price: 50, priceLabel: "40-60",
+    badges: ["closing"], note: "Piena closing season! Serate leggendarie, voli bassissimi. Secondo miglior weekend dell'estate.",
+    events: [
+      { day: "Ven", what: "Possibili closing Calvin Harris / Music On" },
+      { day: "Sab", what: "Black Coffee @ Hi, ultime elrow" },
+      { day: "Dom", what: "Solomun +1 @ Pacha (possibile closing!)" }
+    ]
+  }
+];
+
+function getColor(score) {
+  if (score >= 85) return { bg: 'rgba(22,163,74,0.18)', border: '#16a34a', text: '#4ade80' };
+  if (score >= 70) return { bg: 'rgba(101,163,13,0.15)', border: '#65a30d', text: '#a3e635' };
+  if (score >= 60) return { bg: 'rgba(202,138,4,0.13)', border: '#ca8a04', text: '#facc15' };
+  if (score >= 50) return { bg: 'rgba(234,88,12,0.12)', border: '#ea580c', text: '#fb923c' };
+  return { bg: 'rgba(220,38,38,0.12)', border: '#dc2626', text: '#f87171' };
+}
+
+function getPriceColor(price) {
+  const min = 50, max = 180;
+  const ratio = Math.min(1, Math.max(0, (price - min) / (max - min)));
+  const r = Math.round(34 + ratio * (220 - 34));
+  const g = Math.round(197 - ratio * (197 - 38));
+  const b = Math.round(94 - ratio * (94 - 38));
+  return `rgb(${r},${g},${b})`;
+}
+
+function render() {
+  const cal = document.getElementById('calendar');
+  let html = '';
+
+  weekends.forEach((w, i) => {
+    if (w.month) {
+      html += `<div class="month-divider"><h2>${w.month}</h2><div class="line"></div></div>`;
+    }
+
+    const c = getColor(w.score);
+    const pc = getPriceColor(w.price);
+    const pricePercent = Math.min(100, Math.max(10, ((w.price - 40) / 160) * 100));
+
+    const badgeHtml = w.badges.map(b => {
+      if (b === 'ponte') return '<span class="badge badge-ponte">PONTE</span>';
+      if (b === 'closing') return '<span class="badge badge-closing">CLOSING</span>';
+      if (b === 'resistance') return '<span class="badge badge-resistance">RESISTANCE</span>';
+      if (b === 'radio1') return '<span class="badge badge-radio1">RADIO 1</span>';
+      if (b === 'ferie') return '<span class="badge badge-ferie">0 FERIE</span>';
+      return '';
+    }).join('');
+
+    const ferieText = w.ferie === 0 ? '0 ferie' : w.ferie + ' ferie &rarr; ' + w.giorniTot + 'gg';
+
+    html += `
+      <div class="weekend-row" data-idx="${i}"
+           style="background:${c.bg}; border: 1px solid ${c.border}33;">
+        <div class="weekend-main">
+          <div class="weekend-rank" style="color:${c.text}">${String(i+1).padStart(2,'0')}</div>
+          <div class="weekend-dates">
+            <div class="date-range" style="color:${c.text}">${w.days}</div>
+            <div class="date-detail">${ferieText}</div>
+          </div>
+          <div class="weekend-info">
+            <div class="label">${w.label} ${badgeHtml}</div>
+            <div class="events">${w.events.slice(0,2).map(e => e.day + ': ' + e.what).join(' &middot; ')}</div>
+          </div>
+        </div>
+        <div class="price-col">
+          <div class="price-label">Voli A/R</div>
+          <div class="price-value" style="color:${pc}">&euro;${w.priceLabel}</div>
+          <div class="price-bar-container">
+            <div class="price-bar" style="width:${pricePercent}%; background:${pc}"></div>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  cal.innerHTML = html;
+}
+
+const tooltip = document.getElementById('tooltip');
+
+document.addEventListener('mouseover', (e) => {
+  const row = e.target.closest('.weekend-row');
+  if (!row) { tooltip.style.display = 'none'; return; }
+
+  const idx = parseInt(row.dataset.idx);
+  const w = weekends[idx];
+  const c = getColor(w.score);
+
+  let evHtml = w.events.map(ev =>
+    `<div><span class="day">${ev.day}</span> <span class="club">${ev.what}</span></div>`
+  ).join('');
+
+  tooltip.innerHTML = `
+    <h3 style="color:${c.text}">${w.label}</h3>
+    <div>${w.note}</div>
+    <div class="tip-events">${evHtml}</div>
+  `;
+  tooltip.style.display = 'block';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (tooltip.style.display === 'block') {
+    const pad = 16;
+    let x = e.clientX + pad;
+    let y = e.clientY + pad;
+    if (x + 380 > window.innerWidth) x = e.clientX - 396;
+    if (y + 200 > window.innerHeight) y = e.clientY - 200;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+});
+
+document.addEventListener('mouseout', (e) => {
+  const row = e.target.closest('.weekend-row');
+  if (!row) return;
+  const related = e.relatedTarget;
+  if (!related || !row.contains(related)) {
+    tooltip.style.display = 'none';
+  }
+});
+
+render();
+</script>
+
+</body>
+</html>
